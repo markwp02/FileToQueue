@@ -1,19 +1,15 @@
-package com.markp.FileToQueue.Processor;
+package com.markp.FileToQueue.TemplateTests;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.markp.FileToQueue.FileIO.FileMover;
+import com.markp.FileToQueue.Consumer.MyMessageConsumer;
 import com.markp.FileToQueue.Model.FileActions;
 import com.markp.FileToQueue.Model.MyMessage;
 import com.markp.FileToQueue.Template.FileToQueueTemplate;
-import com.markp.FileToQueue.Validation.FileToQueueValidation;
 import jakarta.jms.JMSException;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jms.core.JmsTemplate;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -21,19 +17,13 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class FileToQueueProcessorTests {
+public class FileToQueueTemplateTests {
 
     @Autowired
     FileToQueueTemplate fileToQueueTemplate;
 
-    @Value("${product-importer.inbox}")
-    private String productImporterInbox;
-
-    @Value("${queue-name}")
-    private String queueName;
-
     @Autowired
-    private JmsTemplate jmsTemplate;
+    MyMessageConsumer myMessageConsumer;
 
     @Test
     public void messageWithNoRequiredImageFile() throws JMSException, JsonProcessingException {
@@ -54,10 +44,8 @@ public class FileToQueueProcessorTests {
         // then
         // Message should have been sent to the queue
 
-        String jsonMessage = (String) jmsTemplate.receiveAndConvert(queueName);
+        MyMessage sentMessage = myMessageConsumer.receiveMessage();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        MyMessage sentMessage = objectMapper.readValue(jsonMessage, MyMessage.class);
         assertTrue(sentMessage != null);
 
         // Image file should not have been moved to the product importer destination path
