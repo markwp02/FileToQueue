@@ -1,6 +1,6 @@
 package com.markp.FileToQueue.Routes;
 
-import com.markp.FileToQueue.TemplateTests.FileToQueueProcessor;
+import com.markp.FileToQueue.Processor.FileToQueueProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

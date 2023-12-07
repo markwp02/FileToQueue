@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
 public class FileToQueueTemplate {
 
@@ -22,10 +20,12 @@ public class FileToQueueTemplate {
     @Autowired
     MyMessageProducer myMessageProducer;
     
-    public void sendMessageTemplate(FileActions fileActions) throws JMSException, JsonProcessingException {
-        // check required files exist
-        boolean hasRequiredFile = FileToQueueValidation.checkAllRequiredFileExist("");
+    public boolean sendMessageTemplate(FileActions fileActions) throws JMSException, JsonProcessingException {
+        boolean sentMessage = false;
 
+        // check required files exist
+        boolean hasRequiredFile = FileToQueueValidation.checkRequiredFileExist(fileActions.getProductImageFilename());
+        System.out.println("Has required file: " + hasRequiredFile);
         // if true
         if(hasRequiredFile) {
             // move files to output directory
@@ -42,7 +42,8 @@ public class FileToQueueTemplate {
                                 .build();
 
             myMessageProducer.sendMessage(message);
+            sentMessage = true;
         }
-
+        return sentMessage;
     }
 }

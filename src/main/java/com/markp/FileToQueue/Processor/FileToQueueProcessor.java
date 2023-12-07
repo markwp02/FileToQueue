@@ -1,4 +1,4 @@
-package com.markp.FileToQueue.TemplateTests;
+package com.markp.FileToQueue.Processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.markp.FileToQueue.Model.FileActions;
