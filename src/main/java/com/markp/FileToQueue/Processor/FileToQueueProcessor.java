@@ -17,9 +17,13 @@ public class FileToQueueProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String in = exchange.getIn().getBody(String.class);
+        String filePath = exchange.getIn().getHeader("CamelFileParent", String.class);
+
         ObjectMapper mapper = new ObjectMapper();
         FileActions fileActions = mapper.readValue(in, FileActions.class);
+        fileActions.setFilePath(filePath);
 
-        fileToQueueTemplate.sendMessageTemplate(fileActions);
+        boolean sentToQueue = fileToQueueTemplate.sendMessageTemplate(fileActions);
+        exchange.setProperty("Success", sentToQueue);
     }
 }

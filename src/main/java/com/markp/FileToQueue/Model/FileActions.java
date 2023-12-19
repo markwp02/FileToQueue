@@ -24,4 +24,6 @@ public class FileActions {
     private int productStock;
 
     private String productImageFilename;
+
+    private String filePath;
 }

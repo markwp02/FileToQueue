@@ -94,6 +94,7 @@ public class FileToQueueTemplateTests {
                 .productPrice(BigDecimal.valueOf(129))
                 .productStock(30)
                 .productImageFilename(fileName)
+                .filePath(".")
                 .build();
 
         fileToQueueTemplate.sendMessageTemplate(fileActions);
@@ -108,11 +109,11 @@ public class FileToQueueTemplateTests {
         // Image file should not have been moved to the product importer destination path
         String imageFinalDestination = sentMessage.getProductImageFilepath();
 
+        System.out.println(imageFinalDestination);
         boolean imageExistsAtDestination = new File(imageFinalDestination).isFile();
         assertTrue(imageExistsAtDestination);
 
-        assertTrue(deleteCopiedFile(fileName));
-
+        System.out.println("About to delete copied image file");
         assertTrue(deleteCopiedFile(imageFinalDestination));
     }
 }
