@@ -3,8 +3,8 @@ package com.markp.FileToQueue.Template;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.markp.FileToQueue.FileIO.FileMover;
 import com.markp.FileToQueue.Model.FileActions;
-import com.markp.FileToQueue.Model.MyMessage;
-import com.markp.FileToQueue.Producer.MyMessageProducer;
+import com.markp.FileToQueue.Model.ProductMessage;
+import com.markp.FileToQueue.Producer.ProductMessageProducer;
 import com.markp.FileToQueue.Validation.FileToQueueValidation;
 import jakarta.jms.JMSException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +17,12 @@ import java.io.File;
 @Slf4j
 @Component
 public class FileToQueueTemplate {
+
     @Value("${product-importer.inbox}")
     private String productImporterInbox;
+
     @Autowired
-    MyMessageProducer myMessageProducer;
+    ProductMessageProducer productMessageProducer;
     public boolean sendMessageTemplate(FileActions fileActions) throws JMSException, JsonProcessingException {
 
         boolean sentMessage = false;
@@ -35,16 +37,17 @@ public class FileToQueueTemplate {
             String imageImporterFilePath = FileMover.moveToDestination(imageFileName, imageFile, productImporterInbox);
 
             // add message to queue
-            MyMessage message = MyMessage.builder()
+            ProductMessage message = ProductMessage.builder()
                                 .productName(fileActions.getProductName())
                                 .productCategory(fileActions.getProductCategory())
                                 .productDescription(fileActions.getProductDescription())
                                 .productPrice(fileActions.getProductPrice())
                                 .productStock(fileActions.getProductStock())
+                                .productImageFilename(fileActions.getProductImageFilename())
                                 .productImageFilepath(imageImporterFilePath)
                                 .build();
 
-            myMessageProducer.sendMessage(message);
+            productMessageProducer.sendMessage(message);
             sentMessage = true;
         }
         return sentMessage;

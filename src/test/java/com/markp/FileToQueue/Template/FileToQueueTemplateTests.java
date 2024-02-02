@@ -1,9 +1,9 @@
 package com.markp.FileToQueue.Template;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.markp.FileToQueue.Consumer.MyMessageConsumer;
+import com.markp.FileToQueue.Consumer.ProductMessageConsumer;
 import com.markp.FileToQueue.Model.FileActions;
-import com.markp.FileToQueue.Model.MyMessage;
+import com.markp.FileToQueue.Model.ProductMessage;
 import jakarta.jms.JMSException;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ public class FileToQueueTemplateTests {
     FileToQueueTemplate fileToQueueTemplate;
 
     @Autowired
-    MyMessageConsumer myMessageConsumer;
+    ProductMessageConsumer productMessageConsumer;
 
     public void copyImageFile(String filename) throws IOException {
         String sourcePath = "src/test/resources/" + filename;
@@ -68,7 +68,7 @@ public class FileToQueueTemplateTests {
         // then
         // Message should have been sent to the queue
 
-        MyMessage sentMessage = myMessageConsumer.receiveMessage();
+        ProductMessage sentMessage = productMessageConsumer.receiveMessage();
         System.out.println("Received message: " + sentMessage);
         assertNotNull(sentMessage);
 
@@ -102,7 +102,7 @@ public class FileToQueueTemplateTests {
         // then
         // Message should have been sent to the queue
 
-        MyMessage sentMessage = myMessageConsumer.receiveMessage();
+        ProductMessage sentMessage = productMessageConsumer.receiveMessage();
 
         assertNotNull(sentMessage);
 

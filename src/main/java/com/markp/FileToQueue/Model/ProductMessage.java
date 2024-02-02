@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Data
-public class MyMessage {
+public class ProductMessage {
 
     private String productName;
 
@@ -22,6 +22,8 @@ public class MyMessage {
     private BigDecimal productPrice;
 
     private int productStock;
+
+    private String productImageFilename;
 
     private String productImageFilepath;
 }
